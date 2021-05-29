@@ -16,7 +16,7 @@ const (
 	DefSlackMsgUnknownCmd string = "抱歉，我不了解您的意思。"
 )
 
-func (s *Slackx) Event() http.HandlerFunc {
+func (s *Slackx) EventHandlerFunc() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if body, err := ioutil.ReadAll(r.Body); err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
