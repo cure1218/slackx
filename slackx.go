@@ -14,7 +14,7 @@ type Slackx struct {
 	BotID         string
 	UserID        string
 	*slack.Client
-	AppMentionHook func(*Slackx, *slackevents.AppMentionEvent, string) error
+	AppMentionHook func(*slackevents.AppMentionEvent, string) error
 }
 
 func New(botToken, appLevelToken string) (*Slackx, error) {
@@ -33,7 +33,7 @@ func New(botToken, appLevelToken string) (*Slackx, error) {
 	}
 }
 
-func (s *Slackx) SetAppMentionHook(hook func(*Slackx, *slackevents.AppMentionEvent, string) error) *Slackx {
+func (s *Slackx) SetAppMentionHook(hook func(*slackevents.AppMentionEvent, string) error) *Slackx {
 	s.AppMentionHook = hook
 	return s
 }

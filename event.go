@@ -8,14 +8,13 @@ import (
 	"strings"
 )
 
+const (
+	DefTextHello string = "hello"
+)
+
 //================================================================
 //
 //================================================================
-const (
-	DefTextHello          string = "hello"
-	DefSlackMsgUnknownCmd string = "抱歉，我不了解您的意思。"
-)
-
 func (s *Slackx) EventHandlerFunc() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if body, err := ioutil.ReadAll(r.Body); err != nil {
@@ -46,7 +45,7 @@ func (s *Slackx) innerEvent(w http.ResponseWriter, event slackevents.EventsAPIIn
 			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
 		} else {
 			withJSON(w, http.StatusOK, nil)
-			s.parser(ev)
+			go s.parser(ev)
 		}
 	// TODO: More cases to implement.
 	default:
@@ -65,13 +64,13 @@ func (s *Slackx) parser(ev *slackevents.AppMentionEvent) {
 		case strings.EqualFold(DefTextHello, cmd):
 			s.PostMessageToChannel(ev.Channel, "Hello! <@"+ev.User+">", false)
 		default:
+			var err error
 			if s.AppMentionHook != nil {
-				if err := s.AppMentionHook(s, ev, cmd); err != nil {
-					s.PostMessageToChannel(ev.Channel, err.Error(), false)
-				}
+				err = s.AppMentionHook(ev, cmd)
 			} else {
-				s.PostMessageToChannel(ev.Channel, DefSlackMsgUnknownCmd, false)
+				err = ErrUnknownCmd
 			}
+			s.PostMessageToChannel(ev.Channel, err.Error(), false)
 		}
 	}
 }
