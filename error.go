@@ -12,8 +12,8 @@ const (
 )
 
 var (
-	ErrUnknownCmd     error = errors.New(DefMsgUnknownCmd)
-	ErrSvcUnavailable error = errors.New(DefMsgSvcUnavailable)
-	ErrSvcErr         error = errors.New(DefMsgSvcErr)
-	ErrSvcDeveloping  error = errors.New(DefMsgSvcOnDeveloping)
+	ErrUnknownCmd      error = errors.New(DefMsgUnknownCmd)
+	ErrSvcUnavailable  error = errors.New(DefMsgSvcUnavailable)
+	ErrSvcErr          error = errors.New(DefMsgSvcErr)
+	ErrSvcOnDeveloping error = errors.New(DefMsgSvcOnDeveloping)
 )
